@@ -36,6 +36,17 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
+        <!-- About modal -->
+        <li class="nav-item">
+          <a class="nav-link" 
+            hx-get="{% url 'about' %}"
+            hx-target="#modals-here"
+            hx-trigger="click"
+            data-toggle="modal"
+            data-target="#modal-here">
+              <i class="fas fa-search"></i>
+          </a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'search' %}">
             <i class="fas fa-search"></i>
@@ -52,7 +63,16 @@
 
   <div class="main_content">
     {% block main_content %}{% endblock %}
+    <!-- Modal placeholder -->
+    <div id="modals-here"
+      class="modal modal-blur fade"
+      role="dialog"
+      tabindex="-1">
 
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content"></div>
+    </div>
+    </div>
   </div>
 
   <footer>
