@@ -9,4 +9,5 @@ urlpatterns = [
     path("category/<str:name>/", views.category, name="category"),
     path("play_video/<int:video_id>/", views.play_video, name="play_video"),
     path("feed", views.feed, name="feed"),
+    path("add_video_form/<str:name>/", views.add_video_form, name="add_video_form"),
 ]
