@@ -39,8 +39,7 @@
     <div class="col-md-4">
 
       <!-- // Content to be replaced with add_video_form -->
-      <a hx-get="{% url 'add_video_form' category.name %}" hx-swap="outerHTML swap:.25s" class="fade-me-out">
-        <i class="fas fa-plus-circle"></i>Add new video</a>
+      {% include 'partials/add_video_link.html' %}
       <!-- // -->
 
     </div>
