@@ -2,6 +2,18 @@
 import more_itertools
 from content.models import Category, Video
 from django.shortcuts import get_object_or_404, render
+from django import forms
+
+# Creating a model form using modelform_factory
+VideoForm = forms.modelform_factory(
+    Video,
+    fields=[
+        "youtube_id",
+        "title",
+        "author",
+        "view_count",
+    ],
+)
 
 
 def home(request):
@@ -13,8 +25,22 @@ def home(request):
 
 def category(request, name):
     category = get_object_or_404(Category, name__iexact=name)
+
+    if request.method == "GET":
+        form = VideoForm()
+    else:
+        # POST
+        form = VideoForm(request.POST)
+        if form.is_valid():
+            video = form.save()
+            video.categories.add(category)
+
     videos = Video.objects.filter(categories=category)
-    data = {"category": category, "rows": more_itertools.chunked(videos, 3)}
+    data = {
+        "category": category,
+        "form": form,
+        "rows": more_itertools.chunked(videos, 3),
+    }
 
     return render(request, "category.html", data)
 
