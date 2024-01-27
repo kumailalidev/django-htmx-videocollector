@@ -1,5 +1,6 @@
 # VideoCollector/content/views.py
 import more_itertools
+import urllib
 from content.models import Category, Video
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
@@ -79,18 +80,29 @@ def add_video_link(request, name):
 
 
 def search(request):
-    search_text = "indy late"
+    search_text = request.GET.get("search_text", "")
+    search_text = urllib.parse.unquote(search_text)
+    search_text = search_text.strip()
 
-    parts = search_text.split()
+    videos = None
 
-    q = Q(title__icontains=parts[0]) | Q(author__icontains=parts[0])
-    for part in parts[1:]:
-        q |= Q(title__icontains=part) | Q(author__icontains=part)  # Union of Q objects
+    if search_text:
+        parts = search_text.split()
 
-    videos = Video.objects.filter(q)
+        q = Q(title__icontains=parts[0]) | Q(author__icontains=parts[0])
+        for part in parts[1:]:
+            q |= Q(title__icontains=part) | Q(
+                author__icontains=part
+            )  # Union of Q objects
+
+        videos = Video.objects.filter(q)
 
     data = {
         "search_text": search_text,
         "videos": videos,
     }
+
+    if request.htmx:
+        return render(request, "partials/search_results.html", data)
+
     return render(request, "search.html", data)
