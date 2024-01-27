@@ -38,7 +38,10 @@
   <div class="row click-to-add justify-content-center">
     <div class="col-md-4">
 
-      {% include "partials/add_video_form.html" %}
+      <!-- // Content to be replaced with add_video_form -->
+      <a hx-get="{% url 'add_video_form' category.name %}" hx-swap="outerHTML swap:.25s" class="fade-me-out">
+        <i class="fas fa-plus-circle"></i>Add new video</a>
+      <!-- // -->
 
     </div>
   </div>
