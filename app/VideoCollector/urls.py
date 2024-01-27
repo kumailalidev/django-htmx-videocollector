@@ -11,4 +11,5 @@ urlpatterns = [
     path("feed", views.feed, name="feed"),
     path("add_video_form/<str:name>/", views.add_video_form, name="add_video_form"),
     path("add_video_link/<str:name>/", views.add_video_link, name="add_video_link"),
+    path("search", views.search, name="search"),
 ]

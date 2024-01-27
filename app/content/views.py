@@ -1,6 +1,7 @@
 # VideoCollector/content/views.py
 import more_itertools
 from content.models import Category, Video
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django import forms
 
@@ -75,3 +76,21 @@ def add_video_link(request, name):
     }
 
     return render(request, "partials/add_video_link.html", data)
+
+
+def search(request):
+    search_text = "indy late"
+
+    parts = search_text.split()
+
+    q = Q(title__icontains=parts[0]) | Q(author__icontains=parts[0])
+    for part in parts[1:]:
+        q |= Q(title__icontains=part) | Q(author__icontains=part)  # Union of Q objects
+
+    videos = Video.objects.filter(q)
+
+    data = {
+        "search_text": search_text,
+        "videos": videos,
+    }
+    return render(request, "search.html", data)
