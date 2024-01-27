@@ -66,3 +66,12 @@ def add_video_form(request, name):
     }
 
     return render(request, "partials/add_video_form.html", data)
+
+
+def add_video_link(request, name):
+    category = get_object_or_404(Category, name__exact=name)
+    data = {
+        "category": category,
+    }
+
+    return render(request, "partials/add_video_link.html", data)
