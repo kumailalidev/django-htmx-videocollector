@@ -126,3 +126,7 @@ def search(request):
         return render(request, "partials/search_results.html", data)
 
     return render(request, "search.html", data)
+
+
+def about(request):
+    return render(request, "partials/about.html")
