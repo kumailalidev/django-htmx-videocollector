@@ -5,6 +5,7 @@ from content.models import Category, Video
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django import forms
+from django.core.paginator import Paginator
 
 # Creating a model form using modelform_factory
 VideoForm = forms.modelform_factory(
@@ -54,9 +55,28 @@ def play_video(request, video_id):
 
 
 def feed(request):
+    videos = Video.objects.all()
+    paginator = Paginator(videos, 2)  # 2 videos per page
+    page_num = int(request.GET.get("page", 1))
+
+    if page_num < 1:
+        page_num = 1
+    elif page_num > paginator.num_pages:
+        page_num = paginator.page(page_num)
+
+    page = paginator.page(page_num)
+
     data = {
-        "videos": Video.objects.all(),
+        "videos": page.object_list,
+        "more_videos": page.has_next(),
+        "next_page": page_num + 1,
     }
+
+    if request.htmx:
+        import time
+
+        time.sleep(2)
+        return render(request, "partials/feed_results.html", data)
 
     return render(request, "feed.html", data)
 
